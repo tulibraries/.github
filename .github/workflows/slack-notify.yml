@@ -16,6 +16,13 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Extract inputs
+        id: extract
+        run: |
+          echo "repo=${{ github.event.inputs.repo || github.event.client_payload.repo }}" >> $GITHUB_OUTPUT
+          echo "job=${{ github.event.inputs.job || github.event.client_payload.job }}" >> $GITHUB_OUTPUT
+          echo "run_id=${{ github.event.inputs.run_id || github.event.client_payload.run_id }}" >> $GITHUB_OUTPUT
+          echo "workflow=${{ github.event.inputs.workflow || github.event.client_payload.workflow }}" >> $GITHUB_OUTPUT
       - name: Send Slack Notification on Failure
         uses: rtCamp/action-slack-notify@v2
         env:
@@ -26,7 +33,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_USERNAME: GitHub Actions
           SLACK_COLOR: failure
-          SLACK_TITLE: "${{ env.WORKFLOW }} / ${{ env.JOB }} Failed"
+          SLACK_TITLE: "${{ github.event.inputs.workflow }} / ${{ github.event.inputs.job }} Failed"
           MSG_MINIMAL: true
-          SLACK_MESSAGE: "Run: https://github.com/${{ env.REPO }}/actions/runs/${{ env.RUN_ID }}"
+          SLACK_MESSAGE: "Run: https://github.com/${{ github.event.inputs.repo }}/actions/runs/${{ github.event.inputs.run_id }}"
 
