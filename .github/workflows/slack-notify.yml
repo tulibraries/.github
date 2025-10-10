@@ -19,10 +19,10 @@ jobs:
       - name: Send Slack Notification on Failure
         uses: rtCamp/action-slack-notify@v2
         env:
-          REPO: ${{ github.event.client_payload.repo || github.repository }}
-          JOB: ${{ github.event.client_payload.job || github.job }}
-          RUN_ID: ${{ github.event.client_payload.run_id || github.run_id }}
-          WORKFLOW: ${{ github.event.client_payload.workflow || github.workflow }}
+          REPO: ${{ github.event.inputs.repo || github.repository }}
+          JOB: ${{ github.event.inputs.job || github.job }}
+          RUN_ID: ${{ github.event.inputs.run_id || github.run_id }}
+          WORKFLOW: ${{ github.event.inputs.workflow || github.workflow }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_USERNAME: GitHub Actions
           SLACK_COLOR: failure
