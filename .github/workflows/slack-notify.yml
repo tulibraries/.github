@@ -5,6 +5,12 @@ name: Slack Notify
 on:
   repository_dispatch:
     types: [workflow_failed]
+  workflow_dispatch:
+    inputs:
+      repo:     { required: true }
+      job:      { required: true }
+      run_id:   { required: true }
+      workflow: { required: true }
 
 jobs:
   notify:
@@ -22,5 +28,5 @@ jobs:
           SLACK_COLOR: failure
           SLACK_TITLE: "${{ env.WORKFLOW }} / ${{ env.JOB }} Failed"
           MSG_MINIMAL: true
-          SLACK_MESSAGE: "Run: https://github.com/${{ github.REPO }}/actions/runs/${{ github.RUN_ID }}"
+          SLACK_MESSAGE: "Run: https://github.com/${{ env.REPO }}/actions/runs/${{ env.RUN_ID }}"
 
