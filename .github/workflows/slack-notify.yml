@@ -1,0 +1,24 @@
+---
+
+name: Slack Notify
+
+on:
+  repository_dispatch:
+    types: [workflow_failed]
+
+  permissions:
+    contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack Notification
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "❌ *${{ github.event.client_payload.workflow }}* failed in *${{ github.event.client_payload.repo }}*.\n<${{ github.server_url }}/${{ github.event.client_payload.repo }}/actions/runs/${{ github.event.client_payload.run_id }}|View run>"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
