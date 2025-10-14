@@ -5,20 +5,30 @@ name: Slack Notify
 on:
   repository_dispatch:
     types: [workflow_failed]
+  workflow_dispatch:
+    inputs:
+      repo:     { required: true }
+      job:      { required: true }
+      run_id:   { required: true }
+      workflow: { required: true }
 
-  permissions:
-    contents: read
+env:
+  REPO:     ${{ github.event.inputs.repo     || github.event.client_payload.repo }}
+  JOB:      ${{ github.event.inputs.job      || github.event.client_payload.job }}
+  RUN_ID:   ${{ github.event.inputs.run_id   || github.event.client_payload.run_id }}
+  WORKFLOW: ${{ github.event.inputs.workflow || github.event.client_payload.workflow }}
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Slack Notification
-        uses: slackapi/slack-github-action@v1
-        with:
-          payload: |
-            {
-              "text": "❌ *${{ github.event.client_payload.workflow }}* failed in *${{ github.event.client_payload.repo }}*.\n<${{ github.server_url }}/${{ github.event.client_payload.repo }}/actions/runs/${{ github.event.client_payload.run_id }}|View run>"
-            }
+      - name: Send Slack Notification on Failure
+        uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_USERNAME: GitHub Actions
+          SLACK_COLOR: failure
+          SLACK_TITLE: "${{ env.WORKFLOW }} / ${{ env.JOB }} Failed"
+          MSG_MINIMAL: true
+          SLACK_MESSAGE: "Run: https://github.com/${{ env.REPO }}/actions/runs/${{ env.RUN_ID }}"
+
