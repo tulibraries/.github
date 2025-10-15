@@ -38,4 +38,3 @@ jobs:
           SLACK_COLOR: failure
           SLACK_TITLE: "${{ env.REPO }} ${{ env.WORKFLOW }} / ${{ env.JOB }} Failed"
           MSG_MINIMAL: true
-          SLACK_MESSAGE: "Run: https://github.com/${{ env.REPO }}/actions/runs/${{ env.RUN_ID }}"
