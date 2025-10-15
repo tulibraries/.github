@@ -36,6 +36,6 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_USERNAME: GitHub Actions
           SLACK_COLOR: failure
-          SLACK_TITLE: "${{ env.WORKFLOW }} / ${{ env.JOB }} Failed"
+          SLACK_TITLE: "${{ env.REPO }} ${{ env.WORKFLOW }} / ${{ env.JOB }} Failed"
           MSG_MINIMAL: true
           SLACK_MESSAGE: "Run: https://github.com/${{ env.REPO }}/actions/runs/${{ env.RUN_ID }}"
