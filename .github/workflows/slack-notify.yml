@@ -14,9 +14,6 @@ on:
       workflow:
         type: string
         required: true
-      job:
-        type: string
-        required: false
     secrets:
       SLACK_WEBHOOK_URL:
         required: true
@@ -28,7 +25,6 @@ jobs:
       REPO: ${{ inputs.repo }}
       RUN_ID: ${{ inputs.run_id }}
       WORKFLOW: ${{ inputs.workflow }}
-      JOB: ${{ inputs.job }}
     steps:
       - name: Post to Slack
         uses: rtCamp/action-slack-notify@v2
@@ -36,6 +32,6 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_USERNAME: GitHub Actions
           SLACK_COLOR: failure
-          SLACK_TITLE: "${{ env.REPO }} ${{ env.WORKFLOW }} / ${{ env.JOB }} Failed"
+          SLACK_TITLE: "${{ env.REPO }} ${{ env.WORKFLOW }} Failed"
           MSG_MINIMAL: true
           SLACK_MESSAGE: "Run: https://github.com/${{ env.REPO }}/actions/runs/${{ env.RUN_ID }}"
